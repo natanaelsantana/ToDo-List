@@ -38,7 +38,8 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
     let item = req.body.newItem
 
-/*This applies a simple logic,if the item is from worklist*/
+/*This applies a simple logic,if the item is from worklist, the item will be 
+there and not in te home list*/
     if (req.body.list === "Work") {
         workItems.push(item);
         res.redirect("/work")
