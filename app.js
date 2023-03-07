@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const date = require (__dirname + "/date.js")
+const date = require (__dirname + "/views/date.js")
 
 
 const app = express();
@@ -22,7 +22,8 @@ app.use(express.static("public"));
 //Also it turn possible to add new items on the list
 app.get("/", function (req, res) {
 
-  
+  const day = date.getDate()
+
     res.render("list", {
         ListTitle: day,
         newListItems: items
