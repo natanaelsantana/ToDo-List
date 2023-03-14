@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const date = require (__dirname + "/views/date.js")
-
+const mongoose = require("mongoose")
 
 const app = express();
 
@@ -17,16 +16,38 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 //----------*-----------------
 
+mongoose.connect("mongodb://127.0.0.1:27017/todolistDB")
 
-//This refers to take the day, month and years and post like a title
-//Also it turn possible to add new items on the list
+
+const itemsSchema = {
+    name: String
+};
+
+const Item = mongoose.model("Item", itemsSchema)
+
+const item1 = new Item ({
+    name: "Welcome to your todolist!"
+});
+const item2 = new Item ({
+    name: "Hit the + to add more"
+});
+const item3 = new Item ({
+    name: "Hit the checkboxes to delete"
+});
+
+const defaultItems= [item1, item2, item3]
+
+async function err () {
+    await Item.insertMany(defaultItems)
+}
+
+
 app.get("/", function (req, res) {
 
-  const day = date.getDate()
 
     res.render("list", {
-        ListTitle: day,
-        newListItems: items
+        ListTitle: "day",
+        newListItems: defaultItems
     })
 
 });
