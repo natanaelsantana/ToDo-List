@@ -133,17 +133,6 @@ app.get("/:customListName", function (req, res){
             }
         })
 
-   /* list.forEach(function(post){
-      let title = _.lowerCase(post.listTitle)
-      let content = post.item
-      let articleTitle = post.itemTitle
-      
-      if (title === topic){
-          res.render("list", {
-        content,
-        articleTitle
-        })}
-    })*/
 })
     
 
