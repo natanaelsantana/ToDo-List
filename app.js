@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose")
+const _ = require('lodash')
 
 const app = express();
 
@@ -35,44 +36,116 @@ const item3 = new Item ({
     name: "Hit the checkboxes to delete"
 });
 
-const defaultItems= [item1, item2, item3]
+const defaultItems= [item1, item2, item3];
 
-async function err () {
+const ListSchema = {
+    name:String,
+    items: [itemsSchema]
+};
+
+const List = mongoose.model("List", ListSchema);
+
+/*async function err () {
     await Item.insertMany(defaultItems)
-}
-
+}*/ 
 
 app.get("/", function (req, res) {
 
-
-    res.render("list", {
-        ListTitle: "day",
-        newListItems: defaultItems
+Item.find( {} )
+    .then (function (foundItems) {
+    if (foundItems.length === 0) {
+            return Item.insertMany(defaultItems)
+    } else {
+        res.render("list", {
+            ListTitle: "today",
+            newListItems: foundItems,
+            });
+        } 
     })
-
 });
 
 app.post("/", function (req, res) {
-    let item = req.body.newItem
+    const itemName = req.body.newItem;
+    const listName = req.body.list
 
-/*This applies a simple logic,if the item is from worklist, the item will be 
-there and not in the home list*/
-    if (req.body.list === "Work") {
-        workItems.push(item);
-        res.redirect("/work")
-      }  else {
-            items.push(item)
-            res.redirect("/")
-        }
+    const item = new Item ({
+        name: itemName
+    })
+
+    if(listName === "Today"){
+        item.save();
+        res.redirect("/");
+    } else {
+        List.findOne({ name: listName})
+            .then (function(foundList){
+                foundList.items.push(item);
+                foundList.save();
+                res.redirect("/" + listName)
+            })
+    }
     
-})
+  
+});
 //----------*-----------------
 
-//this refers to another list 
-app.get("/work", function (req, res) {
-    res.render("list", { ListTitle: "Work List", newListItems: workItems })
+app.post("/delete", function(req,res) {
+  const checkedItemId = req.body.checkbox
+  const listName = req.body.listName
+
+    if (listName === "Today") {
+        Item.find ( {})
+    .then (function () {
+        return Item.deleteOne({_id: checkedItemId})
+        res.redirect("/");
+    })
+    } else {
+        List.findOneAndUpdate (
+            {name : listName},
+            {$pull: {items: {_id : checkedItemId}}})
+        .then(function (foundList) {
+                res.redirect("/" + listName)
+            })
+
+        
+    }
 })
 
+
+//this refers to another list 
+app.get("/:customListName", function (req, res){
+    const customListName = _.capitalize(req.params.customListName)
+    
+  
+    List.findOne ( {name: customListName} )
+        .then (function (foundList) {
+            if (!foundList) {
+                const list = new List ({
+                    name: customListName,
+                    items: defaultItems
+                });
+                list.save()
+                res.redirect("/" + customListName)
+            } else {
+                res.render("list", {
+                    ListTitle: foundList.name,
+                    newListItems: foundList.items,
+                    });
+            }
+        })
+
+   /* list.forEach(function(post){
+      let title = _.lowerCase(post.listTitle)
+      let content = post.item
+      let articleTitle = post.itemTitle
+      
+      if (title === topic){
+          res.render("list", {
+        content,
+        articleTitle
+        })}
+    })*/
+})
+    
 
 app.get("/about", function (req, res) {
     res.render("about")
