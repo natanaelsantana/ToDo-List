@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 //----------*-----------------
 
-mongoose.connect("mongodb://127.0.0.1:27017/todolistDB")
+mongoose.connect("mongodb+srv://natanaelsantana:H3reRXNNYB30dx6c@cluster0.6rcplcf.mongodb.net/todolistDB")
 
 
 const itemsSchema = {
@@ -57,7 +57,7 @@ Item.find( {} )
             return Item.insertMany(defaultItems)
     } else {
         res.render("list", {
-            ListTitle: "today",
+            ListTitle: "Today",
             newListItems: foundItems,
             });
         } 
@@ -95,8 +95,8 @@ app.post("/delete", function(req,res) {
     if (listName === "Today") {
         Item.find ( {})
     .then (function () {
-        return Item.deleteOne({_id: checkedItemId})
         res.redirect("/");
+        return Item.deleteOne({_id: checkedItemId})
     })
     } else {
         List.findOneAndUpdate (
