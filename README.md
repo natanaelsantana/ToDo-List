@@ -5,7 +5,7 @@ I also learned how to deploy my projects with a server side using mongoDB Atlas!
 Now it's possible to create custom lists just typing in the route
 
 
-##Link to functional server side todo-list!
+## **Link to functional server side todo-list!**
 
 https://todo-list-full-version.glitch.me
 
