@@ -1,6 +1,7 @@
 It's a simple To-Do List, i made this as a exercise from The Complete 2023 Web Development Bootcamp by Angela Yu
-this was just a EJS and Node.js introduction and i want I will be back to make more improvements in this project.
-In this project I learned a new concept, like export function and make templates and layout using EJS. 
+this was just a EJS and Node.js introduction and of course my first full stack project!
+In this project I learned a new concept, like export function and make templates and layout using EJS, and also how to use mongodb,
+mongoose and mongodb compass. All of that was a great and hard experience!
 I also learned how to deploy my projects with a server side using mongoDB Atlas!
 Now it's possible to create custom lists just typing in the route
 
